@@ -40,8 +40,14 @@ export default async function handler(req, res) {
 
     const data = await response.json();
 
-    // Return success from Google
-    return res.status(200).json({ success: data.success });
+    // Return full Google response for debugging
+    return res.status(200).json({
+      success: data.success,
+      challenge_ts: data.challenge_ts,
+      hostname: data.hostname,
+      "error-codes": data["error-codes"],
+      raw: data
+    });
   } catch (err) {
     console.error(err);
     return res.status(500).json({ success: false, message: "Server error" });
