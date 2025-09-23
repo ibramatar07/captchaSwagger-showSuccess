@@ -1,0 +1,45 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "version": "1.0.0",
+    "title": "Captcha Verify Proxy"
+  },
+  "host": "captcha-swagger-show-success.vercel.app",
+  "basePath": "/api",
+  "schemes": ["https"],
+  "paths": {
+    "/verify-captcha": {
+      "post": {
+        "summary": "Verify reCAPTCHA token",
+        "consumes": ["application/json"],
+        "parameters": [
+          {
+            "name": "token",
+            "in": "body",
+            "description": "Captcha token from client",
+            "required": true,
+            "schema": { "type": "string" }
+          },
+          {
+            "name": "secret",
+            "in": "body",
+            "description": "Google secret key",
+            "required": true,
+            "schema": { "type": "string" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Verification response",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "success": { "type": "boolean" }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
