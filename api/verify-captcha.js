@@ -1,42 +1,32 @@
-const express = require("express");
-const fetch = require("node-fetch");
-const bodyParser = require("body-parser");
-const app = express();
-const port = process.env.PORT || 3000;
+import fetch from "node-fetch";
 
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(bodyParser.json());
-
-// GET handler for K2 Describe Service
-app.get("/verify-captcha", (req, res) => {
-  res.json({
-    info: {
-      title: "Captcha Verify",
-      version: "1.0",
-    },
-    paths: {
-      "/verify-captcha": {
-        post: {
-          parameters: [
-            { name: "token", in: "body", type: "string", required: true },
-            { name: "secret", in: "body", type: "string", required: true },
-          ],
-          responses: {
-            200: { description: "Returns success true/false" },
+export default async function handler(req, res) {
+  if (req.method === "GET") {
+    // Return Swagger-like metadata for K2 Describe Service
+    return res.status(200).json({
+      info: { title: "Captcha Verify Proxy", version: "1.0" },
+      paths: {
+        "/verify-captcha": {
+          post: {
+            parameters: [
+              { name: "token", in: "body", type: "string", required: true },
+              { name: "secret", in: "body", type: "string", required: true },
+            ],
+            responses: { 200: { description: "Returns success true/false" } },
           },
         },
       },
-    },
-  });
-});
-
-// POST handler for actual verification
-app.post("/verify-captcha", async (req, res) => {
-  const { token, secret } = req.body;
-
-  if (!token || !secret) {
-    return res.status(400).json({ success: false });
+    });
   }
+
+  if (req.method !== "POST") {
+    return res
+      .status(405)
+      .json({ success: false, message: "Method not allowed" });
+  }
+
+  const { token, secret } = req.body;
+  if (!token || !secret) return res.status(400).json({ success: false });
 
   try {
     const response = await fetch(
@@ -48,11 +38,9 @@ app.post("/verify-captcha", async (req, res) => {
       }
     );
     const data = await response.json();
-    res.json({ success: data.success });
+    res.status(200).json({ success: data.success });
   } catch (err) {
     console.error(err);
     res.status(500).json({ success: false });
   }
-});
-
-app.listen(port, () => console.log(`Captcha proxy running on port ${port}`));
+}
