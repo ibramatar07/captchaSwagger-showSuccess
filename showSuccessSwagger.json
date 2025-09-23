@@ -14,18 +14,17 @@
         "consumes": ["application/json"],
         "parameters": [
           {
-            "name": "token",
+            "name": "body",
             "in": "body",
-            "description": "Captcha token from client",
             "required": true,
-            "schema": { "type": "string" }
-          },
-          {
-            "name": "secret",
-            "in": "body",
-            "description": "Google secret key",
-            "required": true,
-            "schema": { "type": "string" }
+            "schema": {
+              "type": "object",
+              "properties": {
+                "token": { "type": "string" },
+                "secret": { "type": "string" }
+              },
+              "required": ["token","secret"]
+            }
           }
         ],
         "responses": {
