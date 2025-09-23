@@ -1,9 +1,6 @@
 {
   "swagger": "2.0",
-  "info": {
-    "version": "1.0.0",
-    "title": "Captcha Verify Proxy"
-  },
+  "info": { "version": "1.0.0", "title": "Captcha Verify Proxy" },
   "host": "captcha-swagger-show-success.vercel.app",
   "basePath": "/api",
   "schemes": ["https"],
@@ -32,9 +29,7 @@
             "description": "Verification response",
             "schema": {
               "type": "object",
-              "properties": {
-                "success": { "type": "boolean" }
-              }
+              "properties": { "success": { "type": "boolean" } }
             }
           }
         }
