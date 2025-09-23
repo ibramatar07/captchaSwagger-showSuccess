@@ -1,11 +1,11 @@
-const express = require("express");
-const fetch = require("node-fetch"); // or global fetch in Node 18+
-const bodyParser = require("body-parser");
+import express from "express";
+import fetch from "node-fetch"; // or global fetch in Node 18+
+import { json } from "body-parser";
 
 const app = express();
 const port = process.env.PORT || 3000;
 
-app.use(bodyParser.json());
+app.use(json());
 
 // POST /verify-captcha
 app.post("/verify-captcha", async (req, res) => {
