@@ -1,20 +1,21 @@
-import express from "express";
-import fetch from "node-fetch"; // or global fetch in Node 18+
-import { json } from "body-parser";
+import fetch from "node-fetch";
 
-const app = express();
-const port = process.env.PORT || 3000;
+export default async function handler(req, res) {
+  // Only allow POST requests
+  if (req.method !== 'POST') {
+    return res.status(405).json({ 
+      success: false, 
+      message: 'Method not allowed' 
+    });
+  }
 
-app.use(json());
-
-// POST /verify-captcha
-app.post("/verify-captcha", async (req, res) => {
   const { token, secret } = req.body;
 
   if (!token || !secret) {
-    return res
-      .status(400)
-      .json({ success: false, message: "Missing token or secret" });
+    return res.status(400).json({ 
+      success: false, 
+      message: "Missing token or secret" 
+    });
   }
 
   try {
@@ -31,14 +32,12 @@ app.post("/verify-captcha", async (req, res) => {
     );
 
     const data = await response.json();
-    // Return only success
-    res.json({ success: data.success });
+    return res.status(200).json({ success: data.success });
   } catch (err) {
     console.error(err);
-    res.status(500).json({ success: false, message: "Server error" });
+    return res.status(500).json({ 
+      success: false, 
+      message: "Server error" 
+    });
   }
-});
-
-app.listen(port, () => {
-  console.log(`Captcha API running on http://localhost:${port}`);
-});
+}
