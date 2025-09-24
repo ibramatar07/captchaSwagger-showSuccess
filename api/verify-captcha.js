@@ -1,5 +1,7 @@
 import fetch from "node-fetch";
 
+const SECRET = "6LfzzdIrAAAAAGUlVR8bl4Dvlir8e3vzC2LGsL6W";
+
 export default async function handler(req, res) {
   // Allow requests from your domain
   res.setHeader("Access-Control-Allow-Origin", "https://dev.solutions.vision"); // or "*" for testing
@@ -27,7 +29,7 @@ export default async function handler(req, res) {
 
   try {
     const params = new URLSearchParams();
-    params.append("secret", secret);
+    params.append("secret", SECRET);
     params.append("response", token);
 
     const response = await fetch(
@@ -46,7 +48,7 @@ export default async function handler(req, res) {
       challenge_ts: data.challenge_ts,
       hostname: data.hostname,
       "error-codes": data["error-codes"],
-      raw: data
+      raw: data,
     });
   } catch (err) {
     console.error(err);
