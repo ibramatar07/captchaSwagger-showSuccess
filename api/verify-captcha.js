@@ -1,7 +1,13 @@
 import fetch from "node-fetch";
-import "dotenv/config";
 
-const SECRET = process.env.SECRET; // Keep secret only on server
+// Remove dotenv import as it's not needed in Vercel
+const SECRET = process.env.RECAPTCHA_SECRET_KEY; // Changed variable name to match Vercel config
+
+if (!SECRET) {
+  throw new Error(
+    "RECAPTCHA_SECRET_KEY environment variable is not configured"
+  );
+}
 
 export default async function handler(req, res) {
   // Allow requests from your domain
