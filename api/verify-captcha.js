@@ -1,6 +1,6 @@
 import fetch from "node-fetch";
 
-const SECRET = "6LfzzdIrAAAAAGUlVR8bl4Dvlir8e3vzC2LGsL6W";
+const SECRET = "6LfzzdIrAAAAAGUlVR8bl4Dvlir8e3vzC2LGsL6W"; // Keep secret only on server
 
 export default async function handler(req, res) {
   // Allow requests from your domain
@@ -13,36 +13,29 @@ export default async function handler(req, res) {
     return res.status(200).end();
   }
 
-  // Only allow POST requests
   if (req.method !== "POST") {
     return res
       .status(405)
       .json({ success: false, message: "Method not allowed" });
   }
 
-  const { token, secret } = req.body;
-  if (!token || !secret) {
-    return res
-      .status(400)
-      .json({ success: false, message: "Missing token or secret" });
+  const { token } = req.body; // Only need the token from client
+  if (!token) {
+    return res.status(400).json({ success: false, message: "Missing token" });
   }
 
   try {
     const params = new URLSearchParams();
-    params.append("secret", SECRET);
+    params.append("secret", SECRET); // secret is only on server
     params.append("response", token);
 
     const response = await fetch(
       "https://www.google.com/recaptcha/api/siteverify",
-      {
-        method: "POST",
-        body: params,
-      }
+      { method: "POST", body: params }
     );
 
     const data = await response.json();
 
-    // Return full Google response for debugging
     return res.status(200).json({
       success: data.success,
       challenge_ts: data.challenge_ts,
