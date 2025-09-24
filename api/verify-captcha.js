@@ -1,6 +1,7 @@
 import fetch from "node-fetch";
+import "dotenv/config";
 
-const SECRET = "6LfzzdIrAAAAAGUlVR8bl4Dvlir8e3vzC2LGsL6W"; // Keep secret only on server
+const SECRET = process.env.SECRET; // Keep secret only on server
 
 export default async function handler(req, res) {
   // Allow requests from your domain
